@@ -59,21 +59,23 @@ async function getAllUsers() {
 
 async function getUserById(userId) {
     try {
-        const {rows: [user]} = await client.query(`
+      const { rows: [ user ] } = await client.query(`
         SELECT id, username, name, location, active
         FROM users
-        WHERE id = ${userId}
-        `);
-
-        if (!user) {
-            return null;
-        }
-
-        user.posts = await getPostsByUser(userId);
+        WHERE id=${ userId }
+      `);
+  
+      if (!user) {
+        return null
+      }
+  
+      user.posts = await getPostsByUser(userId);
+  
+      return user;
     } catch (error) {
-        throw error;
+      throw error;
     }
-  }
+}
 
 async function createPost({
     authorId,
@@ -212,6 +214,18 @@ async function createTags(tagList) {
           }
 }
 
+async function getAllTags() {
+  try {
+    const { rows } = await client.query(`
+    SELECT *
+    FROM tags;
+    `)
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function createPostTag(postId, tagId) {
     try {
         await client.query(`
@@ -302,6 +316,7 @@ getPostById,
 getPostsByUser,
 getPostsByTagName,
 createTags,
+getAllTags,
 createPostTag,
 addTagsToPost
 }
