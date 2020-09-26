@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const PORT = 3000;
 const express = require('express');
 const server = express();
+const jwt = require('jsonwebtoken');
 
 const bodyParser = require('body-parser');
 server.use(bodyParser.json());
